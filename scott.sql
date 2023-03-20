@@ -67,8 +67,358 @@ FROM
 -- 별칭 : 필드에 별칭을 임의로 부여(as 별칭, 혹은 한칸띄고 별칭, 별칭에 공백이 있다면 " ")
 -- 사원들의 1년 연봉 구하기
 SELECT
-    empno "사원 번호",
-    ename 사원명,
+    empno           "사원 번호",
+    ename           사원명,
     sal * 12 + comm 연봉
 FROM
     emp;
+    
+-- 8. 정렬 : ORDER BY
+--            내림차순(DESC), 오름차순(ASC)
+-- ENAME, SAL 열 추출하고 SAL 내림차순으로 정렬
+SELECT
+    ename,
+    sal
+FROM
+    emp
+ORDER BY
+    sal DESC;
+
+-- ENAME, SAL 열 추출하고 SAL 오름차순으로 정렬
+SELECT
+    ename,
+    sal
+FROM
+    emp
+ORDER BY
+    sal ASC;   --ASC는 생략가능
+    
+-- 전체내용 출력하고 결과가 사원번호의 오름차순으로 정렬
+SELECT
+    *
+FROM
+    emp
+ORDER BY
+    empno;
+    
+--전체내용 출력하고 결과가 부서번호의 오름차순, 급여 내림차순으로 정렬
+SELECT
+    *
+FROM
+    emp
+ORDER BY
+    deptno ASC,
+    sal DESC;
+    
+    
+-- emp 테이블의 모든 열 출력
+-- empno => employee_no
+-- ename => employee_name
+-- mgr => manager
+-- sal => salary
+-- comm => commission
+-- deptno => department_no
+-- 부서 번호를 기준으로 내림차순으로 정렬하되 부서번호가 같다면 사원이름을 기준으로 오름차순 정렬
+SELECT
+    empno  employee_no,
+    ename  employee_name,
+    mgr    manager,
+    sal    salary,
+    comm   commission,
+    deptno department_no
+FROM
+    emp
+ORDER BY
+    deptno DESC,
+    ename;
+
+-- WHERE : 특정 조건을 기준으로 원하는 행을 조회
+-- 사원번호가 7782인 사원 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    empno = 7782;
+
+-- 부서번호가 30이고 사원직책이 SALESMAN인 데이터 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+        deptno = 30
+    AND job = 'SALESMAN';
+
+SELECT
+    *
+FROM
+    emp
+WHERE
+        empno = 7499
+    AND deptno = 30;
+
+--부서번호가 30이거나 사원직책이 CLERK인 행 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    job = 'CLERK'
+    OR deptno = 30;
+
+-- 연산자
+-- 산술연산자 : +,-,*,/,mod(나머지)
+-- 비교연산자 : >, >=, <, <=
+-- 등가비교연산자 : =, !=, <>, ^=
+-- 논리부정연산자 : NOT
+-- IN 연산자
+-- BETWEEN A AND B 연산자
+-- LIKE 연사자와 와일드카드( _ , % )
+-- IS NULL 연산자
+-- 집합연산자 : UNION(합집합-중복제거), UNION ALL(합집합-중복포합), MINUS(차집합), INTERSECT(교집합)
+
+-- EMP 테이블에서 급여 열에 12를 곱한 값이 36000 인 행 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    sal * 12 = 36000;
+
+-- JOB이 MANAGER, SALESMAN, CLERK 사원 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    job = 'MANAGER'
+    OR job = 'SALESMAN'
+    OR job = 'CLERK';
+
+SELECT
+    *
+FROM
+    emp
+WHERE
+    deptno IN ( 10, 20 )
+ORDER BY
+    deptno;
+
+-- 급여가 2000 이상 3000 이하인 사원 조회
+--select * from emp where sal >= 2000 and sal <= 3000;
+SELECT
+    *
+FROM
+    emp
+WHERE
+    sal BETWEEN 2000 AND 3000;
+    
+-- LIKE연산자와 와일드 카드( _ , % )
+-- _ : 어떤 값이든 상관없이 한 개의 문자 데이터를 의미
+-- % : 길이와 상관없이(문자 없는 경우도 포함) 모든 문자 데이터를 의미
+-- 사원 이름이 S로 시작하는 사원 정보 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    ename LIKE 'S%';
+-- 사원 이름의 두번째 글자가 L 인 사원만 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    ename LIKE '_L%';
+-- 사원 이름에 AM 이 포함된 사원만 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    ename LIKE '%AM%';
+-- 사원 이름에 AM 이 포함되어 있지 않은 사원만 조회
+SELECT
+    *
+FROM
+    emp
+WHERE
+    ename NOT LIKE '%AM%';
+ 
+ -- NULL : 데이터 값이 비어있는 상태
+SELECT
+    *
+FROM
+    emp
+WHERE
+    comm IS NULL;
+    
+-- 집합연산자
+-- union, union all : 합집합
+-- INTERSECT : 교집합
+-- MINUS : 차집합
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno = 10
+UNION
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno = 10;
+
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno = 10
+UNION ALL
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno = 10;    
+    
+-- emp 테이블에서 사원이름이 S로 끝나는 사원 데이터 조회
+SELECT
+    ename
+FROM
+    emp
+WHERE
+    ename LIKE '%S';
+-- emp 테이블에서 30번 부서에 근무하는 사원 중에서 직책이 salesman인 사원의 사원번호 이름 급여 조회 sal 내림차순
+SELECT
+    empno,
+    ename,
+    sal
+FROM
+    emp
+WHERE
+        deptno = 30
+    AND job = 'SALESMAN'
+ORDER BY
+    sal DESC;
+-- emp 테이블을 사용하여 20,30번 부서에 근무하고 잇는 사원중 급여가 2000 초과인 사원 조회, 사원번호,이름,급여,부서번호 조회
+-- 집합 연산자를 사용하는 방식과 사용하지 않는 방식 두 가지를 사용한다
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno NOT IN ( 20, 30 )
+    AND sal > 2000;
+
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    deptno NOT IN ( 20, 30 )
+INTERSECT
+SELECT
+    empno,
+    ename,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    sal > 2000;
+-- 사원 이름에 E가 포함되어 있는 30번 부서 사원중 급여가 1000~2000 사이가 아닌 사원의 이름
+-- 사원번호, 급여, 부서번호 조회하기
+SELECT
+    ename,
+    empno,
+    sal,
+    deptno
+FROM
+    emp
+WHERE
+    ename LIKE '%E%'
+    AND deptno = 30
+    AND sal NOT BETWEEN 1000 AND 2000;
+
+-- 추가수당이 존재하지 않으며, 상급자가 있고 직책이 MANAGER, CLERK 인 사원중에서 사원 이름의 두번째글자가 L이 아닌 사원의 정보 조회
+SELECT
+    ename
+FROM
+    emp
+WHERE
+    comm IS NULL
+    AND mgr IS NOT NULL
+    AND ( job = 'MANAGER'
+          OR job = 'CLERK' )
+    AND ename NOT LIKE '_L%';
+
+SELECT
+    *
+FROM
+    emp;
+    
+-- 오라클 함수
+-- 오라클에서 기본으로 제공하는 내장 함수와 사용자가 필요에 의해 직접 정의한 사용자 정의 함수
+
+-- 1. UPPER, LOWER, INITCAP
+-- UPPER : 모두 대문자, LOWER : 모두소문자, INITCAP : 첫 글자만 대문자
+-- LIKE '%ORACLE%' OR LIKE '%oracal%' OR LIKE '%Oracle%' ==> 검색 시 사용
+
+select length('한글'), -- 길이
+        lengthb('한글') --바이트 수
+from dual;
+
+-- SUBSTR(문자열데이터, 시작위치, 추출길이) : 추출길이는 생략가능
+-- 문자열 일부 추출
+
+select job, substr(job,1,2), substr(job,3,2), substr(job,5),substr (job,-3) from emp;
+
+-- ENAME, 세번째 글자부터 출력
+select ename, substr(ename,3) from emp;
+
+-- INSTR : 문자열 데이터 안에서 특정 문자 위치 찾기
+-- INSTR(대상문자열, 위치를 찾으려는 문자열, 대상문자열에서 찾기를 시작할 위치(선택), 시작위치에서 찾으려는 문자가 몇번째인지 지정(선택))
+
+-- HELLO, ORACLE 문자열에서 L 문자열 찾기
+select INSTR('HELLO, ORACLE','L') as instr_1,INSTR('HELLO, ORACLE','L',5) as INSTR_2,INSTR('HELLO, ORACLE','L',2,2) as instr_3 from dual;
+
+-- replace : 특정 문자를 다른 문자로 변경
+-- replace(문자열데이터, 찾는문자, 변경문자)
+select '010-1234-5678' as 변경전, replace('010-1234-5678','-',' ') as replace_1 , replace('010-1234-5678','-') as replace_2 from dual;
+
+select '이것이 oracle 이다' , replace('이것이 oracle 이다','이것이','This is') from dual;
+
+-- concat : 두 문자열 데이터 합치기
+select concat(empno,ename) from emp;
+
+select concat(empno,concat(' : ',ename)) from emp;
+
+-- || : : 문자열 연결 연산자
+select empno || ename, empno || ' : ' || ename from emp;
+
+-- TRIM, LTRIM, RTRIM : 공백 포함 특정문자 제거
+select '               이것이            ',trim('               이것이            ') from dual;
+
