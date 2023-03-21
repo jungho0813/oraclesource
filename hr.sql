@@ -143,6 +143,11 @@ select distinct department_id from employees where department_id is not null and
 -- commission_pct null이 아닌 사원들 중에서 commission = salary * commission_pct를 구하여
 -- employee_id, first_name, job_id 출력
 select employee_id,first_name,job_id,commission_pct * salary commission from employees where commission_pct is not null;
+
+-- 회사 내의 최대 연봉 및 최소 연봉의 차이를 출력
+select max(salary)-min(salary) sal_gap from employees;
+-- 매니저로 근무하는 사원들의 총숫자 출력(매니저 중복 제거)
+select count(distinct manager_id) from employees;
     
     
     
