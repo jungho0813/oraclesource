@@ -1125,6 +1125,91 @@ select e.empno, e.ename, e.job, e.sal,s.grade
 from emp e, salgrade s where e.sal between s.losal and s.hisal and e.sal > all (select sal from emp where job = 'SALESMAN')
 order by e.empno;
 
+-- DML (Data Mainpulation Language) : 데이터 추가 (INSERT), 수정(UPDATE), 삭제(DELETE)하는 데이터 조작어
+-- select + DML ==> 자주 사용하는 sql
+
+-- 연습용 테이블 생성
+-- 기존 테이블 복사
+create table dept_temp as select * from dept;
+
+-- 테이블 삭제
+drop table dept_temp;
+
+-- insert into 테이블이름(열이름1,열이름2.....)  : 열이름은 선택사항
+-- values(데이터1, 데이터2....);
+
+-- dept_temp 새로운 부서 추가하기
+insert into dept_temp(deptno, dname, loc)
+values(50,'DATABASE','SEOUL');
+
+-- 열 이름 제거할 때
+insert into dept_temp
+values(60,'NETWORK','BUSAN');
+
+-- insert 시 오류
+
+-- 이 열에 대해 지정된 전체 자릿수보다 큰값이 허용됩니다.
+--insert into dept_temp
+--values(600,'NETWORK','BUSAN');
+
+-- 수치가 부적합합니다
+--insert into dept_temp
+--values('NO','NETWORK','BUSAN');
+
+-- 값의 수가 충분하지 않습니다
+--insert into dept_temp(deptno, dname, loc)
+--values(50,'DATABASE');
+
+insert into dept_temp(deptno, dname, loc)
+values(80,'WEB',NULL);
+
+insert into dept_temp(deptno, dname, loc)
+values(90,'MOBILE','');
+
+insert into dept_temp(deptno, loc)
+values(91,'INCHEON');
+
+select * from dept_temp;
+
+-- emp_temp 생성(emp 테이블 복사 - 데이터는 복사를 하지 않을때)
+-- 구조만 복사
+create table emp_temp as select * from emp where 1 <> 1;
+
+insert into emp_temp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+values (9999,'홍길동','PRESIDENT',NULL,'2001/01/01',5000,1000,10);
+
+insert into emp_temp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+values (1111,'성춘향','MANAGER',9999,'2002/01/05',4000,NULL,20);
+
+insert into emp_temp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+values (2222,'이순신','MANAGER',9999,to_date('07/01/2001','DD/MM/YYYY'),4000,NULL,20);
+
+insert into emp_temp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+values (3333,'심봉사','MANAGER',9999,sysdate,4000,NULL,20);
+
+-- 서브쿼리로 insert 구현
+-- emp, slagrade 테이블을 조인 후 급여 등급이 1인사원만 emp_tmep에 추가
+insert into emp_temp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno from emp e, salgrade s where e.sal between s.losal and s.hisal and s.grade =1;
+
+select * from emp_temp;
+
+-- UPDATE : 테이블에 있는 데이터 수정
+
+--update 테이블명 set 변경할열이름 = 데이터, 변경한열이름 = 데이터.... where 변경을위한 대상 행을 선별하기 위한 조건
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
