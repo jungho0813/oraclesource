@@ -134,9 +134,15 @@ select * from booktbl;
 alter table booktbl add description nvarchar2(100);
 
 
+create table membertbl(
+    userid varchar2(15) primary key,
+    password varchar2(20) not null,
+    name nvarchar2(10) not null,
+    gender nvarchar2(2) not null,
+    email varchar2(50) not null
+);
 
-
-
+insert into membertbl values('hong123','hong123@','È«±æµ¿','³²','hong123@gmail.com');
 
 
 
