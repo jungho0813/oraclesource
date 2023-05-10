@@ -144,6 +144,75 @@ create table membertbl(
 
 insert into membertbl values('hong123','hong123@','홍길동','남','hong123@gmail.com');
 
+select count(*) from membertbl where userid='hong123';
+
+
+
+CREATE TABLE board (
+  bno NUMBER(8) constraint pk_board primary key,
+  name NVARCHAR2(10) NOT NULL,
+  password VARCHAR2(20) NOT NULL,
+  title NVARCHAR2(50) NOT NULL,
+  content NVARCHAR2(1000) NOT NULL,
+  attach nVARCHAR2(100),
+  re_ref NUMBER(8) NOT NULL,
+  re_lev NUMBER(8) NOT NULL,
+  re_seq NUMBER(8) NOT NULL,
+  cnt NUMBER(8) DEFAULT 0,
+  regdate DATE DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE board_seq;
+
+
+-- 페이지 나누기
+-- rownum : 조회된 결과에 번호를 매겨줌
+--               order by 구문에 index 가 들어가지 않는다면 제대로 된 결과를 보장하지 않음
+
+select rownum, bno, title from board
+order by bno desc;
+
+select rownum, bno, title, re_ref, re_lev, re_seq
+from board order by re_ref desc, re_seq asc;
+
+-- 한페이지에 30개의 목록을 보여준다 할 때 페이지요청
+
+
+select *
+from ( select rownum rum, bno, title, re_ref, re_lev, re_seq
+        from (select bno, title, re_ref, re_lev, re_seq
+                from board order by re_ref desc, re_seq asc)
+                where rownum <= ?)
+                where rum > ?;
+
+-- 1page : rnum > 0 , rownum <= 30
+-- 2page : rnum > 30 , rownum <= 60
+-- 3page : rnum > 60 , rownum <= 90
+
+-- 1, 2, 3
+-- rownum 값 : 페이지번호 * 한페이지에 보여줄 목록 개수
+-- rnum 값 : (페이지번호-1) * 한페이지에 보여줄 목록 개수
+
+
+---- spring_board
+-- bno 숫자(10) 제약조건 pk 제약조건명 pk_spring_board , title varchar2(200) not null,
+-- content varchar2(2000) not null, writer varchar2(50) not null, regdate date dafault 현재시스템날짜
+-- updatedate date default
+
+CREATE TABLE spring_board (
+  bno NUMBER(10) constraint pk_spring_board primary key,
+  title VARCHAR2(200) NOT NULL,
+  content VARCHAR2(2000) NOT NULL,
+  writer varchar2(50) not null,
+  regdate DATE DEFAULT SYSDATE,
+  updatedate date default sysdate
+);
+
+CREATE SEQUENCE seq_board;
+
+
+
+
 
 
 
